@@ -263,6 +263,7 @@ class ImageGraph:
         for vertex in self.vertices:
             for neighbor in vertex.edges:
                 matrix[vertex.index][neighbor] = 1
+                matrix[neighbor][vertex.index] = 1 
         return matrix
 
 
@@ -303,15 +304,15 @@ class ImageGraph:
             current_index = queue.dequeue()
             current_vertex = self.vertices[current_index]
 
-            if current_vertex.visited or current_vertex.color != start_color:
+            if current_vertex.visited:
                 continue
 
-            current_vertex.visit_and_set_color(color)
+            if current_vertex.color == start_color:
+                current_vertex.visit_and_set_color(color)
 
             for neighbor in current_vertex.edges:
                 if not self.vertices[neighbor].visited:
                     queue.enqueue(neighbor)
-
         print("BFS completed; final state:")
         self.print_image()
 
@@ -352,10 +353,11 @@ class ImageGraph:
             current_index = stack.pop()
             current_vertex = self.vertices[current_index]
 
-            if current_vertex.visited or current_vertex.color != start_color:
+            if current_vertex.visited:
                 continue
 
-            current_vertex.visit_and_set_color(color)
+            if current_vertex.color == start_color:
+                current_vertex.visit_and_set_color(color)
 
             for neighbor in current_vertex.edges:
                 if not self.vertices[neighbor].visited:
@@ -392,6 +394,8 @@ def create_graph(data):
 
     # return the ImageGraph, starting position, and color as a tuple in this order.
     lines = data.strip().split("\n")
+    if not lines or len(lines[0].split()) != 2:
+        raise ValueError("Invalid input format: First line must contain two integers.")
     image_size, num_vertices = map(int, lines[0].split())
     graph = ImageGraph(image_size)
 
