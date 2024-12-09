@@ -394,8 +394,6 @@ def create_graph(data):
 
     # return the ImageGraph, starting position, and color as a tuple in this order.
     lines = data.strip().split("\n")
-    if not lines or len(lines[0].split()) != 2:
-        raise ValueError("Invalid input format: First line must contain two integers.")
     image_size, num_vertices = map(int, lines[0].split())
     graph = ImageGraph(image_size)
 
